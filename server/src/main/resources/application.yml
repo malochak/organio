@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/organio
-    username: username
-    password: pass
+    username: postgres
+    password: postgres
   jpa:
     database: POSTGRESQL
     show-sql: true
@@ -15,8 +15,8 @@ spring:
       client:
         registration:
           google:
-            clientId: clientId
-            clientSecret: clientSecret
+            clientId: 690456519222-qrlekgpaf5phtiro2t3uiembr0bfe77a.apps.googleusercontent.com
+            clientSecret: M_yZr_gAudPqYy78kYYLUjrL
             redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
             scope:
               - email

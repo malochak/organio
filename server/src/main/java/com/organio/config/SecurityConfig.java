@@ -1,10 +1,17 @@
 package com.organio.config;
 
-import com.organio.CustomUserDetailsService;
+import com.organio.oauth2.handler.OAuth2AuthenticationFailureHandler;
+import com.organio.oauth2.handler.OAuth2AuthenticationSuccessHandler;
 import com.organio.security.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.organio.security.RestAuthenticationEntryPoint;
+import com.organio.security.TokenAuthenticationFilter;
+import com.organio.service.CustomOAuth2UserService;
+import com.organio.service.CustomUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @AllArgsConstructor
@@ -24,15 +32,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailsService customUserDetailsService;
-    /*
-      By default, Spring OAuth2 uses HttpSessionOAuth2AuthorizationRequestRepository to save
-      the authorization request. But, since our service is stateless, we can't save it in
-      the session. We'll save the request in a Base64 encoded cookie instead.
-    */
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
-        return new HttpCookieOAuth2AuthorizationRequestRepository();
+    public TokenAuthenticationFilter tokenAuthenticationFilter() {
+        return new TokenAuthenticationFilter();
     }
 
     @Bean
@@ -40,9 +47,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
+                .jdbcAuthentication()
+                .passwordEncoder(passwordEncoder())
+                .and()
                 .userDetailsService(customUserDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
@@ -57,9 +73,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf()
                 .disable()
+                .formLogin()
+                .disable()
+                .httpBasic()
+                .disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                .and()
                 .authorizeRequests()
-                .antMatchers(
-                        "/",
+                .antMatchers("/",
+                        "/error",
                         "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",
@@ -69,7 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/api/auth/**", "/oauth2/**")
+                .antMatchers("/auth/**", "/oauth2/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -77,9 +100,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2Login()
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorize")
-                .authorizationRequestRepository(cookieAuthorizationRequestRepository())
+                .authorizationRequestRepository(cookieAuthorizationRequestRepository)
                 .and()
                 .redirectionEndpoint()
-                .baseUri("/oauth2/callback/*");
+                .baseUri("/oauth2/callback/*")
+                .and()
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService)
+                .and()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler);
+
+        // Add our custom Token based authentication filter
+        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

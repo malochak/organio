@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import static com.organio.utils.FieldValidationConstants.*;
 
 @Data
-@Entity
+@Entity(name = "users") // on linux there's problem with "user" table creation
 public class User {
 
     @Id

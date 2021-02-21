@@ -7,7 +7,7 @@ function App() {
   return (
           <Container fluid>
               <Row className="main-content">
-                  <Col md={3} className="brdr">
+                  <Col md={3}>
                       <b>Sidenav</b>
                   </Col>
                   <Col md={4} className="brdr">

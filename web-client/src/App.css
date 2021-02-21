@@ -1,8 +1,12 @@
-.main-content {
-    height: 100vh
+body {
+    background-color: #293040;
+    color: #DEDEDE;
 }
 
+.main-content {
+    height: 100vh;
+}
 
 .brdr {
-    border: 1px solid black;
+    border-left: 1px solid #DEDEDE;
 }

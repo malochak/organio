@@ -1,14 +1,24 @@
-import React, {Context} from 'react';
+import React from 'react';
 import './App.css';
+import {Col, Container, Row} from "react-bootstrap";
 
-const SecurityContext: Context<any> = React.createContext("");
 
-const App = () => {
-    return (
-        <SecurityContext.Provider value={"test"}>
-            <h1>Organio</h1>
-        </SecurityContext.Provider>
-    );
+function App() {
+  return (
+          <Container fluid>
+              <Row className="main-content">
+                  <Col md={3} className="brdr">
+                      <b>Sidenav</b>
+                  </Col>
+                  <Col md={4} className="brdr">
+                      <b>Todos</b>
+                  </Col>
+                  <Col md={5} className="brdr">
+                      <b>Calendar</b>
+                  </Col>
+              </Row>
+          </Container>
+  );
 }
 
 export default App;

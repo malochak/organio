@@ -1,24 +1,48 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
-import {Col, Container, Row} from "react-bootstrap";
+import {Button, Col, Container, Row} from "react-bootstrap";
 
 
-function App() {
-  return (
-          <Container fluid>
-              <Row className="main-content">
-                  <Col md={3}>
-                      <b>Sidenav</b>
-                  </Col>
-                  <Col md={4} className="brdr">
-                      <b>Todos</b>
-                  </Col>
-                  <Col md={5} className="brdr">
-                      <b>Calendar</b>
-                  </Col>
-              </Row>
-          </Container>
-  );
+
+
+const App = () => {
+    const [toggled, toggle] = useState(true);
+    const toggleSidebar = () => {
+        toggle(!toggled)
+    }
+
+    return (
+        <div className={toggled ? "menuDisplayed" : ""} id="wrapper">
+            <div id="sidebar-wrapper">
+                <ul className="sidebar-nav">
+                    <li>
+                        <a href="#">Link 1</a>
+                    </li>
+                    <li>
+                        <a href="#">Link 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Link 3</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="content-wrapper">
+                <Container fluid>
+                    <Button onClick={toggleSidebar}>Toggle</Button>
+                    <Row>
+                        <Col md={5}>
+                            <b>Todos</b>
+                        </Col>
+                        <Col md={7}>
+                            <b>Calendar</b>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+
+        </div>
+    );
 }
 
 export default App;

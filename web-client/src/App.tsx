@@ -3,8 +3,6 @@ import './App.css';
 import {Button, Col, Container, Row} from "react-bootstrap";
 
 
-
-
 const App = () => {
     const [toggled, toggle] = useState(true);
     const toggleSidebar = () => {
@@ -27,20 +25,17 @@ const App = () => {
                 </ul>
             </div>
 
-            <div id="content-wrapper">
-                <Container fluid>
+                <Container fluid id="content-wrapper">
                     <Button onClick={toggleSidebar}>Toggle</Button>
-                    <Row>
-                        <Col md={5}>
+                    <Row id="main-row">
+                        <Col md={5} className="brdr">
                             <b>Todos</b>
                         </Col>
-                        <Col md={7}>
+                        <Col md={7} className="brdr">
                             <b>Calendar</b>
                         </Col>
                     </Row>
                 </Container>
-            </div>
-
         </div>
     );
 }

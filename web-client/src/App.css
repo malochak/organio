@@ -9,7 +9,7 @@ body {
 
 #sidebar-wrapper {
     z-index: 1;
-    position: absolute;
+    position: fixed;
     width: 0;
     height: 100%;
     overflow-y: hidden;
@@ -21,10 +21,11 @@ body {
     width: 100%;
     height: 100%;
     position: absolute;
-    padding: 15px;
-    border: 5px solid green;
 }
 
+#main-row {
+    height: calc(100vh - 38px);
+}
 
 #wrapper.menuDisplayed #sidebar-wrapper {
     width: 250px;
@@ -52,4 +53,7 @@ body {
 
 .sidebar-nav li a:hover {
     color: #787878
+}
+
+.brdr {
 }

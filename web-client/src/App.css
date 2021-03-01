@@ -1,6 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
+
+:root {
+    --nav-width: 68px;
+
+    /*===== Colors =====*/
+    --first-color: #4723D9;
+    --first-color-light: #AFA5D9;
+    --white-color: #F7F6FB;
+
+    /*===== Font and typography =====*/
+    --body-font: 'Nunito', sans-serif;
+    --normal-font-size: 1rem;
+
+    /*===== z index =====*/
+    --z-fixed: 100;
+}
+
+*, ::before, ::after {
+    box-sizing: border-box;
+}
+
 body {
     background-color: #293040;
     color: #DEDEDE;
+    font-family: var(--body-font);
+    font-size: var(--normal-font-size);
+    transition: .5s;
+}
+
+a {
+    text-decoration: none;
 }
 
 #wrapper {
@@ -15,6 +44,13 @@ body {
     overflow-y: hidden;
     background-color: #1f222f;
     border: 2px solid #DEDEDE;
+    transition: .5s;
+}
+
+.header__toggle{
+    color: var(--first-color);
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 #content-wrapper {
@@ -24,11 +60,13 @@ body {
 }
 
 #main-row {
+    /* Todo remove calc when button will be inside sidebar*/
     height: calc(100vh - 38px);
 }
 
 #wrapper.menuDisplayed #sidebar-wrapper {
     width: 250px;
+    transition: .5s;
 }
 
 #wrapper.menuDisplayed #content-wrapper {
@@ -47,7 +85,6 @@ body {
 
 .sidebar-nav li a {
     display: block;
-    text-decoration: none;
     color: #DEDEDE;
 }
 

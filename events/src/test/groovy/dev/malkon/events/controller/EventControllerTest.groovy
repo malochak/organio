@@ -17,13 +17,25 @@ class EventControllerTest extends Specification {
         def bindingResult = Mock(BindingResult)
 
         when:
-        def result = controller.createOrUpdate(event, bindingResult)
+        def result = controller.create(event, bindingResult)
 
         then:
         1 * service.save(event, bindingResult) >> event
         result != null
     }
 
+    def 'should call update on EventService object'() {
+        given:
+        def event = EventCreationHelper.validEvent
+        def bindingResult = Mock(BindingResult)
+
+        when:
+        def result = controller.update(event.id, event, bindingResult)
+
+        then:
+        1 * service.update(event.id, event, bindingResult) >> event
+        result != null
+    }
     def 'should call findById on EventService object'() {
         given:
         def event = EventCreationHelper.validEvent

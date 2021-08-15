@@ -1,7 +1,7 @@
 package dev.malkon.events.error.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 import static java.util.Collections.emptyList;
 
-@Data
+@Getter
 public class RequestError {
     private HttpStatus status;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")

@@ -5,13 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import organio.domain.Event;
-import organio.error.domain.RequestSubError;
 import organio.error.exception.InvalidRequestBodyException;
 import organio.error.exception.RecordCreationException;
 import organio.error.exception.RecordNotFoundException;
 import organio.repository.EventRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +19,8 @@ import java.util.List;
 public class EventService {
 
     private final EventRepository repository;
-    private final ErrorMappingService errorMappingService;
-
+    private final BodyValidationService bodyValidationService;
+    private static final String INVALID_EVENT_BODY = "Event Request Body is INVALID";
 
     public Event save(Event event, BindingResult bindingResult) {
         if (event.getId() != null) {
@@ -28,7 +28,7 @@ public class EventService {
             throw new RecordCreationException("Cannot create Event with predefined ID");
         }
 
-        throwExceptionIfBodyInvalid(bindingResult);
+        bodyValidationService.checkBodyAndThrowIfNotValid(bindingResult, INVALID_EVENT_BODY);
 
         var saved = repository.save(event);
         log.info("Saved event inside DB - " + saved);
@@ -36,24 +36,27 @@ public class EventService {
     }
 
     public Event update(String id, Event event, BindingResult bindingResult) {
-        throwExceptionIfBodyInvalid(bindingResult);
+        bodyValidationService.checkBodyAndThrowIfNotValid(bindingResult, INVALID_EVENT_BODY);
         String eventId = event.getId();
 
         if (eventId != null && eventId.equals(id)) {
-            var foundOpt = repository.findById(id);
-
-            // Todo - extract to another method
-            if (foundOpt.isPresent()) {
-                var found = foundOpt.get();
-                log.info("Event Update - event found inside DB - {}", found);
-                return repository.save(event);
-            } else {
-                log.error("Event Update - event with id {} not found inside DB", id);
-                throw new RecordNotFoundException("Event update failed, cannot find event with id " + id, id);
-            }
+            var existingEvent = repository.findById(id);
+            return updateIfPresentOrElseThrow(existingEvent, event);
         } else {
             log.error("Event id ({}) from path don't match id in body ({})", id, eventId);
             throw new InvalidRequestBodyException("Event id from path don't match id in body");
+        }
+    }
+
+    public Event updateIfPresentOrElseThrow(Optional<Event> existingEvent, Event updatedEvent) {
+        if (existingEvent.isPresent()) {
+            var found = existingEvent.get();
+            log.info("Event Update - event found inside DB - {}", found);
+            return repository.save(updatedEvent);
+        } else {
+            String id = updatedEvent.getId();
+            log.error("Event Update - event with id {} not found inside DB", id);
+            throw new RecordNotFoundException("Event update failed, cannot find event with id " + id, id);
         }
     }
 
@@ -71,16 +74,5 @@ public class EventService {
         var found = repository.findAll();
         log.info("Found {} events inside db - {}", found.size(), found);
         return found;
-    }
-
-    private void throwExceptionIfBodyInvalid(BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            List<RequestSubError> validationErrors =
-                    errorMappingService.mapToValidationErrors(bindingResult);
-
-            log.error("Event Request Body is INVALID - {}", validationErrors);
-
-            throw new InvalidRequestBodyException("Event body is invalid", validationErrors);
-        }
     }
 }

@@ -11,6 +11,7 @@ import spock.lang.Specification
 
 import static organio.helper.EventCreationHelper.*
 
+// todo => adjust mocks to current implementation (estimate 20min)
 class EventServiceTest extends Specification {
 
     def repository = Mock(EventRepository)

@@ -2,6 +2,7 @@ package organio.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,6 +13,9 @@ import java.util.Collection;
 @Data
 @Builder
 public class User implements UserDetails {
+
+    @Id
+    String id;
 
     @Email
     private String username;

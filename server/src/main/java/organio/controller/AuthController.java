@@ -1,14 +1,14 @@
 package organio.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import organio.domain.User;
-import organio.payload.UserRegistrationBody;
-import organio.service.UserService;
+import organio.payload.LoginRequest;
+import organio.payload.RegistrationRequest;
+import organio.service.AuthService;
 
 import javax.validation.Valid;
 
@@ -19,10 +19,18 @@ import static organio.constants.RequestPathConstants.API_AUTH;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
+    @ResponseBody
     @PostMapping("/register")
-    public User register(@RequestBody @Valid UserRegistrationBody userRegistrationBody, BindingResult bindingResult) {
-        return userService.create(userRegistrationBody, bindingResult);
+    @ResponseStatus(HttpStatus.CREATED)
+    public User register(@Valid @RequestBody RegistrationRequest registrationRequest, BindingResult bindingResult) {
+        return authService.create(registrationRequest, bindingResult);
+    }
+
+    @ResponseBody
+    @PostMapping("/login")
+    public String login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
+        return authService.authenticate(loginRequest, bindingResult);
     }
 }

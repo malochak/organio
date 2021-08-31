@@ -18,10 +18,10 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Event {
+public class Event extends BaseEntity {
 
     @Id
-    private String id;
+    String id;
 
     @NotBlank(message = "Event's name cannot be blank.")
     private String name;

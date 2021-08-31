@@ -8,9 +8,10 @@ import organio.domain.User;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import java.util.Collections;
 
 @Getter
-public class UserRegistrationBody {
+public class RegistrationRequest {
 
     @Email
     private String username;
@@ -29,6 +30,7 @@ public class UserRegistrationBody {
     public User toUserWithEncodedPassword(PasswordEncoder passwordEncoder) {
         return User.builder()
                 .username(username)
+                .authorities(Collections.emptyList())
                 .password(passwordEncoder.encode(password))
                 .build();
     }

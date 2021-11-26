@@ -12,9 +12,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  public authenticate(login: string, password: string) {
-    let res = this.http.post(this.loginURL, {login: login, password: password})
-
-    console.log(res)
+  async authenticate(login: string, password: string): Promise<any> {
+    console.log(this.loginURL)
+    let response = this.http.post(this.loginURL, {username: login, password: password}).toPromise()
+    response.then(res => console.log('res -', res)).catch(err => console.log('err -', err))
+    console.debug(response)
+    return response
   }
 }

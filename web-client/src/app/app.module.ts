@@ -10,6 +10,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {NavigationComponent} from './navigation/navigation.component';
 import {LandingComponent} from './landing/landing.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {DashboardComponent} from './dashboard/dashboard.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MatToolbarModule,
     MatIconModule,

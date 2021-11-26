@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import organio.domain.User;
 import organio.payload.LoginRequest;
 import organio.payload.RegistrationRequest;
+import organio.payload.TokenResponse;
 import organio.service.AuthService;
 
 import javax.validation.Valid;
@@ -30,7 +31,8 @@ public class AuthController {
 
     @ResponseBody
     @PostMapping("/login")
-    public String login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
+    @ResponseStatus(HttpStatus.OK)
+    public TokenResponse login(@Valid @RequestBody LoginRequest loginRequest, BindingResult bindingResult) {
         return authService.authenticate(loginRequest, bindingResult);
     }
 }

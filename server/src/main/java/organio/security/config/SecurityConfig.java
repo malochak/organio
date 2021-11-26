@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import organio.security.jwt.JwtAuthenticationFilter;
-import organio.security.jwt.TokenProvider;
 import organio.service.MongoUserService;
 
 import static organio.constants.SecurityConstants.AUTH_URL;
@@ -31,7 +30,6 @@ import static organio.constants.SecurityConstants.AUTH_URL;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MongoUserService userService;
-    private final TokenProvider tokenProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)

@@ -13,6 +13,7 @@ import organio.domain.User;
 import organio.error.exception.UserExistsException;
 import organio.payload.LoginRequest;
 import organio.payload.RegistrationRequest;
+import organio.payload.TokenResponse;
 import organio.repository.UserRepository;
 import organio.security.jwt.TokenProvider;
 
@@ -33,13 +34,13 @@ public class AuthService {
         Optional<User> user = repository.findUserByUsername(registrationRequest.getUsername());
 
         if (user.isPresent()) {
-            // todo handle such event
             throw new UserExistsException("User already exists.");
         }
 
         bodyValidationService.checkBodyAndThrowIfNotValid(bindingResult, "Register Request Body is INVALID");
 
-        // todo refactor that shit
+        // todo refactor that shit -
+        //  edit do I really need to return savedUser, will see when working on register on UI ?
         User savedUser = repository.save(registrationRequest.toUserWithEncodedPassword(passwordEncoder));
         savedUser.setPassword(null);
 
@@ -48,8 +49,7 @@ public class AuthService {
         return savedUser;
     }
 
-
-    public String authenticate(LoginRequest loginRequest, BindingResult bindingResult) {
+    public TokenResponse authenticate(LoginRequest loginRequest, BindingResult bindingResult) {
         bodyValidationService.checkBodyAndThrowIfNotValid(bindingResult, "Login Request Body is INVALID");
 
         Authentication authentication = authenticationManager.authenticate(
@@ -60,7 +60,7 @@ public class AuthService {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return tokenProvider.generateToken(authentication);
+        String token = tokenProvider.generateToken(authentication);
+        return TokenResponse.create(token);
     }
 }

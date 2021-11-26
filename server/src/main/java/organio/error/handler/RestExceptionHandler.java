@@ -11,9 +11,9 @@ import organio.error.domain.RequestError;
 import organio.error.exception.InvalidRequestBodyException;
 import organio.error.exception.RecordCreationException;
 import organio.error.exception.RecordNotFoundException;
+import organio.error.exception.UserExistsException;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
@@ -40,4 +40,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new RequestError(BAD_REQUEST, exception);
     }
 
+    @ExceptionHandler(RecordCreationException.class)
+    @ResponseBody
+    @ResponseStatus(CONFLICT)
+    public RequestError handleUserAlreadyExists(UserExistsException exception) {
+        return new RequestError(BAD_REQUEST, exception);
+    }
 }

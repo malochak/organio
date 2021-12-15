@@ -10,7 +10,8 @@ import {MatButtonModule} from "@angular/material/button";
 import {NavigationComponent} from './navigation/navigation.component';
 import {LandingComponent} from './landing/landing.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {AuthInterceptor} from "./helpers/AuthInterceptor";
 
 @NgModule({
   declarations: [
@@ -28,7 +29,9 @@ import {HttpClientModule} from "@angular/common/http";
     MatIconModule,
     MatButtonModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -40,7 +40,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new RequestError(BAD_REQUEST, exception);
     }
 
-    @ExceptionHandler(RecordCreationException.class)
+    @ExceptionHandler(UserExistsException.class)
     @ResponseBody
     @ResponseStatus(CONFLICT)
     public RequestError handleUserAlreadyExists(UserExistsException exception) {

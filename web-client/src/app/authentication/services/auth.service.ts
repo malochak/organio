@@ -16,6 +16,7 @@ export class AuthService {
   public isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
   constructor(private http: HttpClient, private jwt: JwtService) {
+    this.isAuthenticated.next(this.checkAuthenticated())
   }
 
   public authenticate = async (login: string, password: string): Promise<LoginResponse> =>
@@ -38,9 +39,14 @@ export class AuthService {
         }
       })
 
-    checkAuthenticated(): boolean {
-      let isTokenValid = this.jwt.isTokenValid()
-      this.isAuthenticated.next(isTokenValid)
-      return isTokenValid;
-    }
+  checkAuthenticated(): boolean {
+    let isTokenValid = this.jwt.isTokenValid()
+    this.isAuthenticated.next(isTokenValid)
+    return isTokenValid;
+  }
+
+  logout(): void {
+    this.jwt.clearStorage()
+    this.isAuthenticated.next(false)
+  }
 }

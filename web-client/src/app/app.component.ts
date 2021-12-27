@@ -12,9 +12,9 @@ export class AppComponent {
 
   constructor(private authService: AuthService) {
     this.authService.isAuthenticated.subscribe(
-      (isAuthenticated: boolean) => this.isAuthenticated = isAuthenticated
+      (isAuthenticated: boolean) => {
+        this.isAuthenticated = isAuthenticated
+      }
     );
-
-
   }
 }

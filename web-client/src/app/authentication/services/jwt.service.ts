@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import jwtDecode from "jwt-decode";
-import {JWTConstants} from "../../constants/JWTConstants";
+import {JwtConstants} from "../../constants/jwt-constants";
 import * as moment from "moment";
 
 @Injectable({
@@ -12,14 +12,14 @@ export class JwtService {
     const {exp, username} = jwtDecode<any>(token)
     let expiresAt = moment().add(exp)
 
-    localStorage.setItem(JWTConstants.TOKEN_ID, token)
-    localStorage.setItem(JWTConstants.TOKEN_EXP, JSON.stringify(expiresAt))
-    localStorage.setItem(JWTConstants.TOKEN_USER, username)
+    localStorage.setItem(JwtConstants.TOKEN_ID, token)
+    localStorage.setItem(JwtConstants.TOKEN_EXP, JSON.stringify(expiresAt))
+    localStorage.setItem(JwtConstants.TOKEN_USER, username)
   }
 
   public isTokenValid(): boolean {
-    const token = localStorage.getItem(JWTConstants.TOKEN_ID)
-    const exp = localStorage.getItem(JWTConstants.TOKEN_EXP) as string
+    const token = localStorage.getItem(JwtConstants.TOKEN_ID)
+    const exp = localStorage.getItem(JwtConstants.TOKEN_EXP) as string
     const expiresAt = JSON.parse(exp)
 
     let isValid = Boolean(token) && moment().isBefore(expiresAt);
@@ -33,8 +33,8 @@ export class JwtService {
   }
 
   public clearStorage(): void {
-    localStorage.removeItem(JWTConstants.TOKEN_ID)
-    localStorage.removeItem(JWTConstants.TOKEN_EXP)
-    localStorage.removeItem(JWTConstants.TOKEN_USER)
+    localStorage.removeItem(JwtConstants.TOKEN_ID)
+    localStorage.removeItem(JwtConstants.TOKEN_EXP)
+    localStorage.removeItem(JwtConstants.TOKEN_USER)
   }
 }

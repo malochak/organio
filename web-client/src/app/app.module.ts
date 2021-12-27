@@ -12,13 +12,15 @@ import {LandingComponent} from './landing/landing.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./helpers/AuthInterceptor";
+import {NavItemComponent} from './navigation/nav-item/nav-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
     LandingComponent,
-    DashboardComponent
+    DashboardComponent,
+    NavItemComponent
   ],
   imports: [
     BrowserModule,

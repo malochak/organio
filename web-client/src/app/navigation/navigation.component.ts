@@ -20,7 +20,6 @@ export class NavigationComponent {
         this.items = isAuthenticated ? authenticatedNavItems(this.authService) : unauthenticatedNavItems()
       }
     );
-
   }
 
 }

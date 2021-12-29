@@ -54,7 +54,7 @@ public class AuthService {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
+                        loginRequest.getLogin(),
                         loginRequest.getPassword()
                 )
         );

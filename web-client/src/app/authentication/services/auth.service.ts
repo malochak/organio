@@ -4,14 +4,16 @@ import {environment} from "../../../environments/environment";
 import {BehaviorSubject} from "rxjs";
 import {LoginResponse} from "../payload/LoginResponse";
 import {JwtService} from "./jwt.service";
+import {FieldsErrors} from "../../utils/FieldsErrors";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private baseURL: string = environment.baseURL
-  private loginURL: string = this.baseURL + "auth/login"
+  private authURL: string = environment.baseURL + "/auth"
+  private loginURL: string = this.authURL + "/login"
+  private logoutURL: string = this.authURL + "/logout" // todo: implement logout action
 
   public isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
@@ -20,32 +22,38 @@ export class AuthService {
   }
 
   public authenticate = async (login: string, password: string): Promise<LoginResponse> =>
-    this.http.post<any>(this.loginURL, {username: login, password: password})
+    this.http.post<any>(this.loginURL, {login: login, password: password})
       .toPromise()
       .then(res => {
         this.isAuthenticated.next(true)
         this.jwt.resolveToken(res.token)
         return {
           success: true,
-          errors: {field: "", errors: []}
+          errors: []
         }
       })
       .catch(err => {
+        console.log(err.error.subErrors)
+        console.log(err)
         this.isAuthenticated.next(false)
         this.jwt.clearStorage()
         return {
           success: false,
-          errors: {field: "", errors: []}
+          errors: this.mapErrorResponseToFields(err)
         }
       })
 
-  checkAuthenticated(): boolean {
+  private mapErrorResponseToFields = (errorResponse: any): Array<FieldsErrors> => {
+    return errorResponse.error.subErrors.map((err: any) => ({field: err.field, message: err.message}))
+  }
+
+  public checkAuthenticated = (): boolean => {
     let isTokenValid = this.jwt.isTokenValid()
     this.isAuthenticated.next(isTokenValid)
     return isTokenValid;
   }
 
-  logout(): void {
+  public logout = async (): Promise<void> => {
     this.jwt.clearStorage()
     this.isAuthenticated.next(false)
   }

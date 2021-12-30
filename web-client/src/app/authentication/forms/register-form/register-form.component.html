@@ -12,9 +12,14 @@
         {{getErrorMessage("password")}}
       </mat-error>
     </mat-form-field>
+    <mat-form-field>
+      <input matInput type="password" placeholder="Confirm Password" formControlName="passwordConfirmation">
+      <mat-error>
+        {{getErrorMessage("passwordConfirmation")}}
+      </mat-error>
+    </mat-form-field>
     <button mat-raised-button color="primary">Login</button>
   </form>
   <hr />
-  <p>Don't have an account? <a routerLink="/auth/register"> Register one!</a></p>
+  <p>Already have an account? <a routerLink="/auth/login"> Login!</a></p>
 </div>
-

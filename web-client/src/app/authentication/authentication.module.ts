@@ -8,11 +8,15 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
+import {RegisterComponent} from './register/register.component';
+import {RegisterFormComponent} from './forms/register-form/register-form.component';
 
 @NgModule({
   declarations: [
     LoginComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    RegisterComponent,
+    RegisterFormComponent
   ],
     imports: [
         CommonModule,

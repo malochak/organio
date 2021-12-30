@@ -5,11 +5,11 @@ import {AuthService} from "../../services/auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
-  selector: 'app-login-form',
-  templateUrl: './login-form.component.html',
+  selector: 'app-register-form',
+  templateUrl: './register-form.component.html',
   styleUrls: ['../authentication-form.component.scss']
 })
-export class LoginFormComponent extends AuthenticationFormComponent {
+export class RegisterFormComponent extends AuthenticationFormComponent {
 
   constructor(protected fb: FormBuilder,
               protected authService: AuthService,
@@ -18,18 +18,12 @@ export class LoginFormComponent extends AuthenticationFormComponent {
     super(fb, authService, route, router);
     this.form = fb.group({
       login: '',
-      password: ''
+      password: '',
+      passwordConfirmation: ''
     })
   }
 
-  async onSubmit() {
-    const {login, password} = this.form.value
-    let loginResponse = await this.authService.authenticate(login, password)
-
-    if (loginResponse.success) {
-      await this.router.navigate([this.returnUrl])
-    } else {
-      this.processErrorResponse(loginResponse.errors)
-    }
+  onSubmit = () => {
+    console.log('onSubmit()')
   }
 }

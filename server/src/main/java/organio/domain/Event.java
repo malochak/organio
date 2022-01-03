@@ -3,6 +3,7 @@ package organio.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import organio.constants.RequestPathConstants;
@@ -15,6 +16,7 @@ import java.util.Date;
 import static organio.constants.ValidaitonConstants.NOT_BLANK;
 
 
+@Data
 @Builder // todo: repair that
 @NoArgsConstructor
 @AllArgsConstructor

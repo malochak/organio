@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import organio.error.domain.RequestSubError;
 import organio.error.exception.InvalidRequestBodyException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,12 +19,14 @@ public class BodyValidationService {
 
     public void checkBodyAndThrowIfNotValid(BindingResult bindingResult, String exceptionMsg) {
         if (bindingResult.hasErrors()) {
-            List<RequestSubError> validationErrors =
-                    errorMappingService.mapToValidationErrors(bindingResult);
+            List<RequestSubError> errors = new ArrayList<>();
 
-            log.error("{} - {}", exceptionMsg, validationErrors);
+            errors.addAll(errorMappingService.mapFieldsToValidationErrors(bindingResult));
+            errors.addAll(errorMappingService.mapGlobalToValidationErrors(bindingResult));
 
-            throw new InvalidRequestBodyException(exceptionMsg, validationErrors);
+            log.error("{} - {}", exceptionMsg, errors);
+
+            throw new InvalidRequestBodyException(exceptionMsg, errors);
         }
     }
 }

@@ -30,7 +30,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public User create(RegistrationRequest registrationRequest, BindingResult bindingResult) {
+    public void create(RegistrationRequest registrationRequest, BindingResult bindingResult) {
         Optional<User> user = repository.findUserByUsername(registrationRequest.getUsername());
 
         if (user.isPresent()) {
@@ -39,14 +39,9 @@ public class AuthService {
 
         bodyValidationService.checkBodyAndThrowIfNotValid(bindingResult, "Register Request Body is INVALID");
 
-        // todo refactor that shit -
-        //  edit do I really need to return savedUser, will see when working on register on UI ?
         User savedUser = repository.save(registrationRequest.toUserWithEncodedPassword(passwordEncoder));
-        savedUser.setPassword(null);
 
         log.info("Username with email address {} has been saved.", savedUser.getUsername());
-
-        return savedUser;
     }
 
     public TokenResponse authenticate(LoginRequest loginRequest, BindingResult bindingResult) {

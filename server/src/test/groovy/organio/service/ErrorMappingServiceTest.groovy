@@ -20,7 +20,7 @@ class ErrorMappingServiceTest extends Specification {
                         'Event\'s name cannot be blank.')
         ]
         when:
-        def result = errorMappingService.mapToValidationErrors(bindingResult)
+        def result = errorMappingService.mapFieldsToValidationErrors(bindingResult)
 
         then:
         1 * bindingResult.getFieldErrors() >> fieldErrors

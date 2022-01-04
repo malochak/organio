@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {BehaviorSubject} from "rxjs";
-import {Response} from "../payload/Response";
+import {errorResponse, Response, successResponse} from "../payload/Response";
 import {JwtService} from "./jwt.service";
-import {FieldsErrors} from "../../utils/FieldsErrors";
 import {LoginRequest} from "../payload/LoginRequest";
+import {RegisterRequest} from "../payload/RegisterRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,7 @@ export class AuthService {
 
   private authURL: string = environment.baseURL + "/auth"
   private loginURL: string = this.authURL + "/login"
+  private registerURL: string = this.authURL + "/register"
   private logoutURL: string = this.authURL + "/logout" // todo: implement logout action
 
   public isAuthenticated: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
@@ -28,25 +29,19 @@ export class AuthService {
       .then(res => {
         this.isAuthenticated.next(true)
         this.jwt.resolveToken(res.token)
-        return {
-          success: true,
-          errors: []
-        }
+        return successResponse
       })
       .catch(err => {
-        console.log(err.error.subErrors)
-        console.log(err)
         this.isAuthenticated.next(false)
         this.jwt.clearStorage()
-        return {
-          success: false,
-          errors: this.mapErrorResponseToFields(err)
-        }
+        return errorResponse(err)
       })
 
-  private mapErrorResponseToFields = (errorResponse: any): Array<FieldsErrors> => {
-    return errorResponse.error.subErrors.map((err: any) => ({field: err.field, message: err.message}))
-  }
+  public register = async (payload: RegisterRequest): Promise<Response> =>
+    this.http.post(this.registerURL, payload)
+      .toPromise()
+      .then(() => successResponse)
+      .catch(err => errorResponse(err))
 
   public checkAuthenticated = (): boolean => {
     let isTokenValid = this.jwt.isTokenValid()

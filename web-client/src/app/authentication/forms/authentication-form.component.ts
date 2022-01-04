@@ -14,19 +14,19 @@ export class AuthenticationFormComponent implements OnInit {
               protected authService: AuthService,
               protected route: ActivatedRoute,
               protected router: Router,
-              protected returnUrl: string) {
-    this.returnUrl = this.route.snapshot.queryParams.returnUrl || returnUrl
+              protected successURL: string) {
+    this.successURL = this.route.snapshot.queryParams.returnUrl || successURL
   }
 
   async ngOnInit() {
     if (this.authService.checkAuthenticated()) {
-      await this.router.navigate([this.returnUrl])
+      await this.router.navigate([this.route.snapshot.queryParams.returnUrl || "/dashboard"])
     }
   }
 
   evalResponse = async (response: Response) => {
     if (response.success) {
-      await this.router.navigate([this.returnUrl])
+      await this.router.navigate([this.successURL])
     } else {
       this.processErrorResponse(response.errors)
     }

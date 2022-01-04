@@ -31,7 +31,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public void create(RegistrationRequest registrationRequest, BindingResult bindingResult) {
-        Optional<User> user = repository.findUserByUsername(registrationRequest.getUsername());
+        Optional<User> user = repository.findUserByUsername(registrationRequest.getLogin());
 
         if (user.isPresent()) {
             throw new UserExistsException("User already exists.");

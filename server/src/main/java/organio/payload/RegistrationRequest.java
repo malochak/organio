@@ -20,7 +20,7 @@ public class RegistrationRequest {
 
     @Email(message = "E-mail address " + NOT_VALID)
     @NotBlank(message = "E-mail address " + NOT_BLANK)
-    private String username;
+    private String login;
 
     @Setter
     @Size(min = 6, message = "Password should contain at least 6 characters.")
@@ -30,7 +30,7 @@ public class RegistrationRequest {
 
     public User toUserWithEncodedPassword(PasswordEncoder passwordEncoder) {
         return User.builder()
-                .username(username)
+                .username(login)
                 .authorities(Collections.emptyList())
                 .password(passwordEncoder.encode(password))
                 .build();

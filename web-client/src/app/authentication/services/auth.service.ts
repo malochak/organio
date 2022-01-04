@@ -2,9 +2,10 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {BehaviorSubject} from "rxjs";
-import {LoginResponse} from "../payload/LoginResponse";
+import {Response} from "../payload/Response";
 import {JwtService} from "./jwt.service";
 import {FieldsErrors} from "../../utils/FieldsErrors";
+import {LoginRequest} from "../payload/LoginRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +22,8 @@ export class AuthService {
     this.isAuthenticated.next(this.checkAuthenticated())
   }
 
-  public authenticate = async (login: string, password: string): Promise<LoginResponse> =>
-    this.http.post<any>(this.loginURL, {login: login, password: password})
+  public authenticate = async (payload: LoginRequest): Promise<Response> =>
+    this.http.post<any>(this.loginURL, payload)
       .toPromise()
       .then(res => {
         this.isAuthenticated.next(true)

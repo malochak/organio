@@ -1,6 +1,6 @@
 import {FieldsErrors} from "../../utils/FieldsErrors";
 
-export interface LoginResponse {
+export interface Response {
   success: boolean,
   errors: Array<FieldsErrors>
 }

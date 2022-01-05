@@ -8,9 +8,7 @@ export function authenticatedNavItems(authService: AuthService): Array<NavItem> 
       matIcon: "logout",
       fullPath: "/",
       ariaLabel: "Logout button, it allows to go to logout from current account",
-      action: () => {
-        authService.logout()
-      }
+      action: () => authService.logout()
     }
   ];
 }

@@ -1,4 +1,4 @@
-package organio.payload;
+package organio.payload.authentication;
 
 import lombok.Getter;
 
@@ -9,7 +9,7 @@ import static organio.constants.ValidaitonConstants.NOT_BLANK;
 import static organio.constants.ValidaitonConstants.NOT_VALID;
 
 @Getter
-public class LoginRequest {
+public class LoginRequest implements AuthRequest{
 
     @Email(message = "E-mail address " + NOT_VALID)
     @NotBlank(message = "E-mail address " + NOT_BLANK)
@@ -17,4 +17,14 @@ public class LoginRequest {
 
     @NotBlank(message = "Password " + NOT_BLANK)
     String password;
+
+    @Override
+    public boolean errorOnExist() {
+        return false;
+    }
+
+    @Override
+    public String getMessageOnExistError() {
+        return "User with provided E-mail does  not exist.";
+    }
 }

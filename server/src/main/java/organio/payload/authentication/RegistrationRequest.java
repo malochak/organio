@@ -1,4 +1,4 @@
-package organio.payload;
+package organio.payload.authentication;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import static organio.constants.ValidaitonConstants.NOT_VALID;
 
 @Getter
 @PasswordMatching(fieldName = "passwordConfirmation")
-public class RegistrationRequest {
+public class RegistrationRequest implements AuthRequest{
 
     @Email(message = "E-mail address " + NOT_VALID)
     @NotBlank(message = "E-mail address " + NOT_BLANK)
@@ -36,4 +36,13 @@ public class RegistrationRequest {
                 .build();
     }
 
+    @Override
+    public boolean errorOnExist() {
+        return true;
+    }
+
+    @Override
+    public String getMessageOnExistError() {
+        return "User with provided E-mail already exist.";
+    }
 }

@@ -10,10 +10,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import organio.domain.User;
-import organio.error.exception.UserExistsException;
-import organio.payload.LoginRequest;
-import organio.payload.RegistrationRequest;
+import organio.error.exception.UserException;
 import organio.payload.TokenResponse;
+import organio.payload.authentication.AuthRequest;
+import organio.payload.authentication.LoginRequest;
+import organio.payload.authentication.RegistrationRequest;
 import organio.repository.UserRepository;
 import organio.security.jwt.TokenProvider;
 
@@ -31,13 +32,9 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public void create(RegistrationRequest registrationRequest, BindingResult bindingResult) {
-        Optional<User> user = repository.findUserByUsername(registrationRequest.getLogin());
-
-        if (user.isPresent()) {
-            throw new UserExistsException("User already exists.");
-        }
-
         bodyValidationService.checkBodyAndThrowIfNotValid(bindingResult, "Register Request Body is INVALID");
+
+        validateUserExists(registrationRequest);
 
         User savedUser = repository.save(registrationRequest.toUserWithEncodedPassword(passwordEncoder));
 
@@ -46,6 +43,8 @@ public class AuthService {
 
     public TokenResponse authenticate(LoginRequest loginRequest, BindingResult bindingResult) {
         bodyValidationService.checkBodyAndThrowIfNotValid(bindingResult, "Login Request Body is INVALID");
+
+        validateUserExists(loginRequest);
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -57,5 +56,14 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.generateToken(authentication);
         return TokenResponse.create(token);
+    }
+
+    private void validateUserExists(AuthRequest request) throws UserException {
+        String login = request.getLogin();
+        Optional<User> user = repository.findUserByUsername(login);
+
+        if (user.isPresent() && request.errorOnExist() || user.isEmpty() && !request.errorOnExist()) {
+            throw new UserException(request.getMessageOnExistError(), login);
+        }
     }
 }

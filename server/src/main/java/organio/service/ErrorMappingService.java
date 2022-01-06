@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import organio.error.domain.RequestSubError;
 import organio.error.domain.ValidationError;
+import organio.payload.authentication.RegistrationRequest;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class ErrorMappingService {
      * @param error obj that contains type validation error
      * @return fieldName set when using PasswordMatching annotation
      * @see organio.validator.PasswordMatching Annotation definition
-     * @see organio.payload.RegistrationRequest Annotation property setting
+     * @see RegistrationRequest Annotation property setting
      */
     private String evalFieldNameForGlobalError(ObjectError error) {
         Object[] errorArgs = error.getArguments();
@@ -54,4 +55,5 @@ public class ErrorMappingService {
         }
         return "unknown";
     }
+
 }

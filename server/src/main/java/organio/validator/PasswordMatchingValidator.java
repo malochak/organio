@@ -1,6 +1,6 @@
 package organio.validator;
 
-import organio.payload.RegistrationRequest;
+import organio.payload.authentication.RegistrationRequest;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import organio.payload.LoginRequest;
-import organio.payload.RegistrationRequest;
 import organio.payload.TokenResponse;
+import organio.payload.authentication.LoginRequest;
+import organio.payload.authentication.RegistrationRequest;
 import organio.service.AuthService;
 
 import javax.validation.Valid;

@@ -13,6 +13,9 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./helpers/AuthInterceptor";
 import {NavItemComponent} from './navigation/nav-item/nav-item.component';
+import {LayoutModule} from '@angular/cdk/layout';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,7 @@ import {NavItemComponent} from './navigation/nav-item/nav-item.component';
     NavigationComponent,
     LandingComponent,
     DashboardComponent,
-    NavItemComponent
+    NavItemComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,11 +32,16 @@ import {NavItemComponent} from './navigation/nav-item/nav-item.component';
     BrowserAnimationsModule,
     MatToolbarModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSidenavModule,
+    LayoutModule,
+    MatSidenavModule,
+    MatListModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

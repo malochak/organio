@@ -1,5 +1,9 @@
 <mat-toolbar color="primary">
-  <button *ngIf="isAuthenticated" mat-icon-button aria-label="Menu button, it allows open and close side navigation">
+  <button
+    *ngIf="isAuthenticated"
+    mat-icon-button aria-label="Menu button, it allows open and close side navigation"
+    (click)="sidenav.toggle()"
+  >
     <mat-icon>menu</mat-icon>
   </button>
   <button routerLink="/" mat-icon-button class="brand-button" aria-label="Brand name, it allows to return to main view">

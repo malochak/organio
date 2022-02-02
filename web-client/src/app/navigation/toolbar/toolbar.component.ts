@@ -1,16 +1,16 @@
 import {Component, Input} from '@angular/core';
-import {NavItem} from "../domain/nav-item";
-import {authenticatedNavItems} from "../constants/authenticated-nav-items";
-import {unauthenticatedNavItems} from "../constants/unauthenticated-nav-items";
-import {AuthService} from "../authentication/services/auth.service";
+import {NavItem} from "../../domain/nav-item";
+import {authenticatedNavItems} from "../../constants/authenticated-nav-items";
+import {unauthenticatedNavItems} from "../../constants/unauthenticated-nav-items";
+import {AuthService} from "../../authentication/services/auth.service";
 import {MatSidenav} from "@angular/material/sidenav";
 
 @Component({
   selector: 'app-navigation',
-  templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  templateUrl: './toolbar.component.html',
+  styleUrls: ['./toolbar.component.scss']
 })
-export class NavigationComponent {
+export class Toolbar {
 
   @Input() sidenav: MatSidenav
 

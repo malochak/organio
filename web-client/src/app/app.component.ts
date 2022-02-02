@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {AuthService} from "./authentication/services/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -7,14 +6,6 @@ import {AuthService} from "./authentication/services/auth.service";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'web-client';
-  isAuthenticated = false;
+  title = 'Organio'
 
-  constructor(private authService: AuthService) {
-    this.authService.isAuthenticated.subscribe(
-      (isAuthenticated: boolean) => {
-        this.isAuthenticated = isAuthenticated
-      }
-    );
-  }
 }

@@ -1,0 +1,39 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$dark-primary-text: rgba(black, 0.87);
+$light-primary-text: white;
+
+$green-palette: (
+  50: #e0f3f0,
+  100: #b4e1d9,
+  200: #83cfc1,
+  300: #51bba9,
+  400: #2cac97,
+  500: #0c9d85,
+  600: #0a8f78,
+  700: #067f68,
+  800: #026f5a,
+  900: #01533f,
+  A100: #c2e5cb,
+  A200: #9bd4aa,
+  A400: #51b86f,
+  A700: #188b42,
+  contrast: (
+    50: $dark-primary-text,
+    100: $dark-primary-text,
+    200: $dark-primary-text,
+    300: $dark-primary-text,
+    400: $dark-primary-text,
+    500: $light-primary-text,
+    600: $light-primary-text,
+    700: $light-primary-text,
+    800: $light-primary-text,
+    900: $light-primary-text,
+    A100: $dark-primary-text,
+    A200: $dark-primary-text,
+    A400: $dark-primary-text,
+    A700: $dark-primary-text,
+  )
+);
